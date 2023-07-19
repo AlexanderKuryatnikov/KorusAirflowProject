@@ -3,12 +3,18 @@ from airflow.decorators import task, task_group
 from airflow.operators.postgres_operator import PostgresOperator
 from datetime import datetime
 
+from etl_from_sources_to_internship.python_scripts.consts import (
+    CSV_PATH,
+    INTERNSHIP_CONN_ID,
+    SOURCE_CONN_ID,
+    TABLE_NAMES
+)
 from etl_from_sources_to_internship.python_scripts.utils import (
     load_csv_to_db,
     load_from_source
 )
 
-
+csv_path = 'dags/etl_from_sources_to_internship/csv_files'
 table_names = (
     'brand',
     'category',
@@ -18,32 +24,36 @@ table_names = (
     'transaction',
 )
 default_args = {
-    'postgres_conn_id': 'db_internship',
+    'postgres_conn_id': INTERNSHIP_CONN_ID,
 }
 
 
 @task_group(group_id='load_tables')
 def load_tables():
-    for table_name in table_names:
+    for table_name in TABLE_NAMES:
         @task(task_id=f'load_{table_name}')
         def load_table(table_name=table_name):
             if table_name == 'store':
                 load_csv_to_db(
                     sql_table_name=f'{table_name}',
-                    csv_path=('dags/etl_from_sources_to_internship/'
-                              f'csv_files/{table_name}s.csv')
+                    csv_path=f'{CSV_PATH}/{table_name}s.csv',
+                    conn_id=INTERNSHIP_CONN_ID
                 )
             else:
-                load_from_source(sql_table_name=f'{table_name}')
+                load_from_source(
+                    sql_table_name=f'{table_name}',
+                    conn_id_from=SOURCE_CONN_ID,
+                    conn_id_to=INTERNSHIP_CONN_ID
+                )
         load_table()
 
 
-@task_group(group_id='invalid_tables')
+@task_group(group_id='invalidate_tables')
 def invalid_tables():
-    for table_name in table_names:
+    for table_name in TABLE_NAMES:
         PostgresOperator(
-            task_id=f'invalid_{table_name}',
-            sql=f'invalid_{table_name}.sql'
+            task_id=f'invalidate_{table_name}',
+            sql=f'SELECT invalidate_{table_name}();'
         )
 
 
@@ -51,27 +61,27 @@ def invalid_tables():
 def transform_tables():
     transform_brand_task = PostgresOperator(
         task_id='transform_brand',
-        sql='transform_brand.sql'
+        sql='SELECT transform_brand();'
     )
     transform_category_task = PostgresOperator(
         task_id='transform_category',
-        sql='transform_category.sql'
+        sql='SELECT transform_category();'
     )
     transform_store_task = PostgresOperator(
         task_id='transform_store',
-        sql='transform_store.sql'
+        sql='SELECT transform_store();'
     )
     transform_product_task = PostgresOperator(
         task_id='transform_product',
-        sql='transform_product.sql'
+        sql='SELECT transform_product();'
     )
     transform_stock_task = PostgresOperator(
         task_id='transform_stock',
-        sql='transform_stock.sql'
+        sql='SELECT transform_stock();'
     )
     transform_transaction_task = PostgresOperator(
         task_id='transform_transaction',
-        sql='transform_transaction.sql'
+        sql='SELECT transform_transaction();'
     )
 
     [
@@ -88,19 +98,18 @@ with DAG(
     schedule='@once',
     catchup=False,
     default_args=default_args,
-    template_searchpath=['dags/etl_from_sources_to_internship/sql_scripts']
 ) as dag:
     truncate_stg_task = PostgresOperator(
         task_id='truncate_stg',
-        sql='truncate_stg.sql'
+        sql='SELECT truncate_stg();'
     )
     truncate_dds_task = PostgresOperator(
         task_id='truncate_dds',
-        sql='truncate_dds.sql'
+        sql='SELECT truncate_dds();'
     )
     truncate_invalid_data_task = PostgresOperator(
         task_id='truncate_invalid_data',
-        sql='truncate_invalid_data.sql'
+        sql='SELECT truncate_invalid_data();'
     )
 
     load_tables_group = load_tables()

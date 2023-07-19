@@ -31,8 +31,8 @@ def load_and_close_connection(sql_table_name, table, connection):
         raise AirflowException(f'ERROR: Error in loading data: {error}')
 
 
-def load_from_source(sql_table_name):
-    connection_source = get_connection(conn_id='db_source')
+def load_from_source(sql_table_name, conn_id_from, conn_id_to):
+    connection_source = get_connection(conn_id=conn_id_from)
     try:
         cursor_source = connection_source.cursor()
         cursor_source.execute(f'SELECT * FROM sources.{sql_table_name}')
@@ -42,13 +42,13 @@ def load_from_source(sql_table_name):
     except Exception as error:
         raise AirflowException(f'ERROR: Error in fetching data: {error}')
 
-    connection_dds = get_connection(conn_id='db_internship')
+    connection_dds = get_connection(conn_id=conn_id_to)
     load_and_close_connection(sql_table_name=sql_table_name,
                               table=table,
                               connection=connection_dds)
 
 
-def load_csv_to_db(sql_table_name, csv_path):
+def load_csv_to_db(sql_table_name, csv_path, conn_id):
     with open(csv_path, 'r', encoding='utf8') as f:
         csv_reader = csv.reader(f, delimiter=';')
         next(csv_reader)
@@ -56,7 +56,7 @@ def load_csv_to_db(sql_table_name, csv_path):
         for row in csv_reader:
             table.append(row)
 
-    connection_dds = get_connection(conn_id='db_internship')
+    connection_dds = get_connection(conn_id=conn_id)
     load_and_close_connection(sql_table_name=sql_table_name,
                               table=table,
                               connection=connection_dds)
