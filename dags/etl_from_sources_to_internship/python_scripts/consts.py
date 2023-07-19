@@ -10,4 +10,5 @@ TABLE_NAMES = (
     'product',
     'stock',
     'transaction',
+    'transaction_store'
 )

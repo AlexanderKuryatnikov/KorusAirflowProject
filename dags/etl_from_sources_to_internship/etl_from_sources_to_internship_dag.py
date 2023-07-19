@@ -15,15 +15,7 @@ from etl_from_sources_to_internship.python_scripts.utils import (
     load_from_source
 )
 
-csv_path = 'dags/etl_from_sources_to_internship/csv_files'
-table_names = (
-    'brand',
-    'category',
-    'store',
-    'product',
-    'stock',
-    'transaction',
-)
+
 default_args = {
     'postgres_conn_id': INTERNSHIP_CONN_ID,
 }
@@ -37,7 +29,13 @@ def load_tables():
             if table_name == 'store':
                 load_csv_to_db(
                     sql_table_name=f'{table_name}',
-                    csv_path=f'{CSV_PATH}/{table_name}s.csv',
+                    csv_path=f'{CSV_PATH}/stores.csv',
+                    conn_id=INTERNSHIP_CONN_ID
+                )
+            elif table_name == 'transaction_store':
+                load_csv_to_db(
+                    sql_table_name=f'{table_name}',
+                    csv_path=f'{CSV_PATH}/транзакции-магазины.csv',
                     conn_id=INTERNSHIP_CONN_ID
                 )
             else:
@@ -84,13 +82,20 @@ def transform_tables():
         task_id='transform_transaction',
         sql='SELECT transform_transaction();'
     )
+    transform_transaction_store_task = PostgresOperator(
+        task_id='transform_transaction_store',
+        sql='SELECT transform_transaction_store();'
+    )
 
     [
         transform_brand_task, transform_category_task
-    ] >> transform_product_task >> transform_transaction_task
-
-    transform_product_task >> transform_stock_task
-    transform_store_task >> transform_stock_task
+    ] >> transform_product_task >> [
+        transform_transaction_task, transform_stock_task
+    ]
+    transform_store_task >> [
+        transform_stock_task, transform_transaction_store_task
+    ]
+    transform_transaction_store_task >> transform_transaction_task
 
 
 with DAG(
