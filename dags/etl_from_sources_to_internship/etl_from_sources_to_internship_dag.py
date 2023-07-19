@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.decorators import task, task_group
+from airflow.operators.empty import EmptyOperator
 from airflow.operators.postgres_operator import PostgresOperator
 from datetime import datetime
 
@@ -99,6 +100,9 @@ with DAG(
     catchup=False,
     default_args=default_args,
 ) as dag:
+    start_task = EmptyOperator(task_id='start')
+    end_task = EmptyOperator(task_id='end')
+
     truncate_stg_task = PostgresOperator(
         task_id='truncate_stg',
         sql='SELECT truncate_stg();'
@@ -117,10 +121,12 @@ with DAG(
     invalid_tables_group = invalid_tables()
 
     (
+        start_task >>
         truncate_stg_task >>
         load_tables_group >>
         truncate_dds_task >>
         transform_tables_group >>
         truncate_invalid_data_task >>
-        invalid_tables_group
+        invalid_tables_group >>
+        end_task
     )
