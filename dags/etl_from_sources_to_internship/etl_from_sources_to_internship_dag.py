@@ -16,7 +16,7 @@ from etl_from_sources_to_internship.python_scripts.task_groups import (
 with DAG(
     dag_id='etl_from_sources_to_internship',
     start_date=datetime(2021, 1, 1),
-    schedule='@once',
+    schedule='@daily',
     catchup=False,
     default_args=DEFAULT_ARGS,
 ) as dag:
