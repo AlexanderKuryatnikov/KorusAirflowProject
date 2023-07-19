@@ -12,3 +12,7 @@ TABLE_NAMES = (
     'transaction',
     'transaction_store'
 )
+
+DEFAULT_ARGS = {
+    'postgres_conn_id': INTERNSHIP_CONN_ID,
+}
