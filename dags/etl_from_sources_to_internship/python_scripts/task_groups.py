@@ -82,7 +82,7 @@ def transform_tables():
 
 
 @task_group(group_id='invalidate_tables')
-def invalid_tables():
+def invalidate_tables():
     for table_name in TABLE_NAMES:
         PostgresOperator(
             task_id=f'invalidate_{table_name}',

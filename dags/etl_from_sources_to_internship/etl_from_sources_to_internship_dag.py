@@ -7,7 +7,7 @@ from etl_from_sources_to_internship.python_scripts.consts import (
     DEFAULT_ARGS
 )
 from etl_from_sources_to_internship.python_scripts.task_groups import (
-    invalid_tables,
+    invalidate_tables,
     load_tables,
     transform_tables
 )
@@ -38,7 +38,7 @@ with DAG(
 
     load_tables_group = load_tables()
     transform_tables_group = transform_tables()
-    invalid_tables_group = invalid_tables()
+    invalidate_tables_group = invalidate_tables()
 
     (
         start_task >>
@@ -47,6 +47,6 @@ with DAG(
         truncate_dds_task >>
         transform_tables_group >>
         truncate_invalid_data_task >>
-        invalid_tables_group >>
+        invalidate_tables_group >>
         end_task
     )
