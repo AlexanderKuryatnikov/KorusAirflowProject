@@ -2,9 +2,11 @@ import csv
 
 from airflow.exceptions import AirflowException
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from psycopg2.extras import execute_values
 
 
 def get_connection(conn_id):
+    '''Подключение к БД.'''
     try:
         pg_hook = PostgresHook(postgres_conn_id=conn_id)
         connection = pg_hook.get_conn()
@@ -14,16 +16,15 @@ def get_connection(conn_id):
 
 
 def load_and_close_connection(sql_table_name, table, connection):
+    '''Загрузка таблицы в БД и отключение от БД.'''
     try:
         cursor_dds = connection.cursor()
-        columns_num = len(table[0])
-        args_str = ','.join(['%s'] * columns_num)
-        values = ','.join(
-            cursor_dds.mogrify(f'({args_str})', row).
-            decode('utf-8') for row in table
+        cursor_dds.execute(f'TRUNCATE TABLE stg.{sql_table_name};')
+        execute_values(
+            cursor_dds,
+            f'INSERT INTO stg.{sql_table_name} VALUES %s',
+            table
         )
-        insert_sql = f'INSERT INTO stg.{sql_table_name} VALUES '
-        cursor_dds.execute(insert_sql + values)
         connection.commit()
         cursor_dds.close()
         connection.close()
@@ -32,6 +33,7 @@ def load_and_close_connection(sql_table_name, table, connection):
 
 
 def load_from_source(sql_table_name, conn_id_from, conn_id_to):
+    '''Копирование таблицы из одной БД в другую.'''
     connection_source = get_connection(conn_id=conn_id_from)
     try:
         cursor_source = connection_source.cursor()
@@ -49,6 +51,7 @@ def load_from_source(sql_table_name, conn_id_from, conn_id_to):
 
 
 def load_csv_to_db(sql_table_name, csv_path, conn_id):
+    '''Загрузка таблицы в БД из csv файла.'''
     with open(csv_path, 'r', encoding='utf8') as f:
         csv_reader = csv.reader(f, delimiter=';')
         next(csv_reader)
