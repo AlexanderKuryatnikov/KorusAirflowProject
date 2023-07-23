@@ -9,7 +9,7 @@ from common_package.consts import (
 
 
 with DAG(
-    dag_id='form_datamart',
+    dag_id='form_datamarts',
     start_date=datetime(2021, 1, 1),
     schedule=None,
     catchup=False,
