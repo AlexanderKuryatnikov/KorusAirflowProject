@@ -1,10 +1,12 @@
 from airflow.decorators import task, task_group
 from airflow.operators.postgres_operator import PostgresOperator
 
-from etl_from_sources_to_internship.python_scripts.consts import (
-    CSV_PATH,
+from common_package.consts import (
     INTERNSHIP_CONN_ID,
     SOURCE_CONN_ID,
+)
+from etl_from_sources_to_internship.python_scripts.consts import (
+    CSV_PATH,
     TABLE_NAMES
 )
 from etl_from_sources_to_internship.python_scripts.utils import (
