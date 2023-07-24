@@ -2,9 +2,9 @@
 ### Описание
 Проект написан на Airflow. Оркестрируется процесс загрузки и обработки данных двумя ДАГами:
 1. etl_from_sources_to_internship
-   Загружает данные из БД internship_sources, переносит и обработывает данные в БД internship_6_db в три слоя: stg, dds, invalid_data. После наполнения слоя dds запускается ДАГ form_datamarts.
+Загружает данные из БД internship_sources, переносит и обработывает данные в БД internship_6_db в три слоя: stg, dds, invalid_data. После наполнения слоя dds запускается ДАГ form_datamarts.
 3. form_datamarts
-   Перезаписывает витрины.
+Перезаписывает витрины.
 ### Как запустить
 1. Установить Docker и Docker Compose
 2. Клонировать репозиторий и перейти в директорию:
