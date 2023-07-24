@@ -44,6 +44,6 @@ docker-compose up
         - Schema: internship_6_db
         - Login: interns_6
         - Port: 5432
-9. Запустить ДАГ etl_from_sources_to_internship_dag
+9. Запустить ДАГи
 ### Разработчик
 Александр Курятников
