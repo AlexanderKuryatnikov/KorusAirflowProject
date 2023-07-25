@@ -8,5 +8,5 @@ DEFAULT_ARGS = {
     'postgres_conn_id': INTERNSHIP_CONN_ID,
 }
 
-SCHEDULE = '55 * * * *'
+SCHEDULE = '@daily'
 START_DATE = datetime(2021, 1, 1)
