@@ -1,10 +1,10 @@
 from airflow import DAG
-from airflow.operators.dagrun_operator import TriggerDagRunOperator
 from airflow.operators.empty import EmptyOperator
-from datetime import datetime
 
 from common_package.consts import (
-    DEFAULT_ARGS
+    DEFAULT_ARGS,
+    SCHEDULE,
+    START_DATE
 )
 from etl_from_sources_to_internship.python_scripts.task_groups import (
     invalidate_tables,
@@ -15,8 +15,8 @@ from etl_from_sources_to_internship.python_scripts.task_groups import (
 
 with DAG(
     dag_id='etl_from_sources_to_internship',
-    start_date=datetime(2021, 1, 1),
-    schedule='@daily',
+    start_date=START_DATE,
+    schedule=SCHEDULE,
     catchup=False,
     default_args=DEFAULT_ARGS,
 ) as dag:
@@ -26,16 +26,11 @@ with DAG(
     load_tables_group = load_tables()
     transform_tables_group = transform_tables()
     invalidate_tables_group = invalidate_tables()
-    trigger_form_datamart_task = TriggerDagRunOperator(
-        task_id='trigger_form_datamart',
-        trigger_dag_id='form_datamart'
-    )
 
     (
         start_task >>
         load_tables_group >>
         transform_tables_group >>
-        trigger_form_datamart_task >>
         invalidate_tables_group >>
         end_task
     )
