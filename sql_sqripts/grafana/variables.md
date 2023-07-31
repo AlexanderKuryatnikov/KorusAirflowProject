@@ -1,4 +1,4 @@
-# Общие переменные для отчёта продаж, анализа продаж и сравнительного анализа
+### Общие переменные для отчёта продаж, анализа продаж и сравнительного анализа
 Выбор из списка магазинов
     - name: pos_name_var
     - variable type: query
@@ -14,7 +14,7 @@
     - sort: Alphabetical (case-insensitive, asc)
     - selection options: multi-value, include all options
 
-# Переменные для анализа продаж
+### Переменные для анализа продаж
 Выбор топ 5 лучших или топ 5 худших
     - name: top_var
     - variable type: custom
@@ -26,7 +26,7 @@
     - label: Расчитать топ
     - custom options: по выручке : revenue, по количеству : quantity
 
-# Переменные для сравнительного анализа по периодам
+### Переменные для сравнительного анализа по периодам
 Выбор из списка товаров
     - name: product_var
     - variable type: query
@@ -45,7 +45,7 @@
     - label: Сравнить
     - custom options: по выручке : SUM(revenue), по количеству : SUM(quantity), по среднему чеку : SUM(revenue)/SUM(quantity)
 
-# Переменные для прогноза закупок
+### Переменные для прогноза закупок
 Выбор из списка магазинов
     - name: pos_name_var
     - variable type: query
