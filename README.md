@@ -5,6 +5,7 @@
     Загружает данные из БД internship_sources, переносит и обработывает данные в БД internship_6_db в три слоя: stg, dds, invalid_data. После наполнения слоя dds запускается ДАГ form_datamarts.
 3. form_datamarts \
     Перезаписывает витрины.
+Витрины визуализированы с помощью Grafana.
 ### Как запустить
 1. Установить Docker и Docker Compose
 2. Клонировать репозиторий и перейти в директорию:
@@ -45,5 +46,14 @@ docker-compose up
         - Login: interns_6
         - Port: 5432
 9. Запустить ДАГи
+10. Открыть UI визуализации по адресу http://localhost:3000 (логин/пароль по умолчанию admin/admin)
+11. Настроить подключение к базе данных (Home > Connections > Add new connection > PostgreSQL):
+    - Name: internship_db
+    - Host: 10.1.108.29:5432
+    - Database: internship_6_db
+    - User: interns_6
+    - TLS/SSL Mode: disable
+    - Version: 12
+12. Импортировать дашборды из KorusAirflowProject/grafana_storage/dashboards, указать internship_db как источних данных
 ### Разработчик
 Александр Курятников

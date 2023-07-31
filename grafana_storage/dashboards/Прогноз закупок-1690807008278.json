@@ -1,0 +1,250 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_INTERNSHIP_DB",
+      "label": "internship_db",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "postgres",
+      "pluginName": "PostgreSQL"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.0.3"
+    },
+    {
+      "type": "datasource",
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Товар"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 453
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Остаток на складе"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 205
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Количество на закупку"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 283
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Средняя цена за единицу"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 243
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    name_short AS Товар,\r\n    brand AS Бренд,\r\n    SUM(available_quantity) AS \"Остаток на складе\",\r\n    AVG(cost_per_item) AS \"Средняя цена за единицу\",\r\n    '' AS \"Количество на закупку\",\r\n    '' AS \"Дата закупки\"\r\nFROM\r\n    datamarts.purchase_forecast\r\nWHERE\r\n    pos_name IN ($pos_name_var)\r\n    AND name_short IN ($product_var)\r\n    AND available_on = '${__from:date:YYYY-MM-DD}'\r\nGROUP BY\r\n    name_short, brand",
+          "refId": "purchase_forecsat",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Прогноз закупок",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_INTERNSHIP_DB}"
+        },
+        "definition": "SELECT DISTINCT pos_name FROM datamarts.purchase_forecast",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Магазин",
+        "multi": true,
+        "name": "pos_name_var",
+        "options": [],
+        "query": "SELECT DISTINCT pos_name FROM datamarts.purchase_forecast",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_INTERNSHIP_DB}"
+        },
+        "definition": "SELECT DISTINCT name_short FROM datamarts.purchase_forecast",
+        "description": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Товар",
+        "multi": true,
+        "name": "product_var",
+        "options": [],
+        "query": "SELECT DISTINCT name_short FROM datamarts.purchase_forecast",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "2021-05-31T21:00:00.000Z",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Прогноз закупок",
+  "uid": "abf15ad3-0be7-4378-9166-2cbdf6b0d0bc",
+  "version": 3,
+  "weekStart": ""
+}

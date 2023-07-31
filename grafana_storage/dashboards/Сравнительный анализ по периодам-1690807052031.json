@@ -1,0 +1,852 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_INTERNSHIP_DB",
+      "label": "internship_db",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "postgres",
+      "pluginName": "PostgreSQL"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.0.3"
+    },
+    {
+      "type": "datasource",
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    TO_CHAR(SUM(revenue), '999 999 999 999 999')\r\nFROM\r\n    datamarts.sales_report\r\nWHERE\r\n    $__timeFilter(recorded_on + interval '$interval_var')\r\n    AND name_short IN ($product_var)\r\n    AND pos_name IN ($pos_name_var)\r\n    AND category_name IN ($category_var)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Общая выручка за ранний период",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    TO_CHAR(SUM(quantity), '999 999 999 999 999')\r\nFROM\r\n    datamarts.sales_report\r\nWHERE\r\n    $__timeFilter(recorded_on + interval '$interval_var')\r\n    AND name_short IN ($product_var)\r\n    AND pos_name IN ($pos_name_var)\r\n    AND category_name IN ($category_var)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Общее количество за ранний период",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    TO_CHAR(SUM(revenue) / SUM(quantity), '999 999 999 999 999')\r\nFROM\r\n    datamarts.sales_report\r\nWHERE\r\n    $__timeFilter(recorded_on + interval '$interval_var')\r\n    AND name_short IN ($product_var)\r\n    AND pos_name IN ($pos_name_var)\r\n    AND category_name IN ($category_var)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Общий средний чек за ранний период",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 0,
+        "y": 3
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    TO_CHAR(SUM(revenue), '999 999 999 999 999')\r\nFROM\r\n    datamarts.sales_report\r\nWHERE\r\n    $__timeFilter(recorded_on)\r\n    AND name_short IN ($product_var)\r\n    AND pos_name IN ($pos_name_var)\r\n    AND category_name IN ($category_var)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Общая выручка за поздний период",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 8,
+        "y": 3
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    TO_CHAR(SUM(quantity), '999 999 999 999 999')\r\nFROM\r\n    datamarts.sales_report\r\nWHERE\r\n    $__timeFilter(recorded_on)\r\n    AND name_short IN ($product_var)\r\n    AND pos_name IN ($pos_name_var)\r\n    AND category_name IN ($category_var)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Общее количество за позний период",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 16,
+        "y": 3
+      },
+      "id": 7,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    TO_CHAR(SUM(revenue) / SUM(quantity), '999 999 999 999 999')\r\nFROM\r\n    datamarts.sales_report\r\nWHERE\r\n    $__timeFilter(recorded_on)\r\n    AND name_short IN ($product_var)\r\n    AND pos_name IN ($pos_name_var)\r\n    AND category_name IN ($category_var)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Общий средний чек за подний период",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_INTERNSHIP_DB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 1,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 30,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_INTERNSHIP_DB}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    COALESCE(period1.Дата, period2.Дата) AS Дата,\r\n    period1.field_prev AS \"Ранний период\",\r\n    period2.field_now AS \"Поздний период\"\r\nFROM (\r\n    SELECT\r\n    \trecorded_on::DATE || ' / ' || (recorded_on::DATE + interval '$interval_var')::DATE AS Дата,\r\n\t    $compare_calc_var AS field_prev\r\n\tFROM datamarts.sales_report\r\n\tWHERE\r\n\t    $__timeFilter(recorded_on + interval '$interval_var')\r\n        AND name_short IN ($product_var)\r\n        AND pos_name IN ($pos_name_var)\r\n        AND category_name IN ($category_var)\r\n\tGROUP BY\r\n    \trecorded_on::DATE\r\n    ) AS period1 FULL JOIN (\r\n    SELECT\r\n        (recorded_on::DATE - interval '$interval_var')::DATE || ' / ' || recorded_on::DATE AS Дата,\r\n        $compare_calc_var AS field_now\r\n    FROM datamarts.sales_report\r\n    WHERE\r\n        $__timeFilter(recorded_on)\r\n        AND name_short IN ($product_var)\r\n        AND pos_name IN ($pos_name_var)\r\n        AND category_name IN ($category_var)\r\n    GROUP BY\r\n        recorded_on::DATE\r\n    ) AS period2 ON period1.Дата = period2.Дата\r\nORDER BY Дата",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Сравнительный анализ по периодам",
+      "type": "barchart"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_INTERNSHIP_DB}"
+        },
+        "definition": "SELECT DISTINCT pos_name FROM datamarts.sales_report",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Магазины",
+        "multi": true,
+        "name": "pos_name_var",
+        "options": [],
+        "query": "SELECT DISTINCT pos_name FROM datamarts.sales_report",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_INTERNSHIP_DB}"
+        },
+        "definition": "SELECT DISTINCT category_name FROM datamarts.sales_report",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Категория",
+        "multi": true,
+        "name": "category_var",
+        "options": [],
+        "query": "SELECT DISTINCT category_name FROM datamarts.sales_report",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_INTERNSHIP_DB}"
+        },
+        "definition": "SELECT DISTINCT name_short FROM datamarts.sales_report",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Товар",
+        "multi": true,
+        "name": "product_var",
+        "options": [],
+        "query": "SELECT DISTINCT name_short FROM datamarts.sales_report",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "7 дней назад",
+          "value": "7 days"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Предыдущий период",
+        "multi": false,
+        "name": "interval_var",
+        "options": [
+          {
+            "selected": true,
+            "text": "7 дней назад",
+            "value": "7 days"
+          },
+          {
+            "selected": false,
+            "text": "14 дней назад",
+            "value": "14 days"
+          },
+          {
+            "selected": false,
+            "text": "1 месяц назад",
+            "value": "1 month"
+          },
+          {
+            "selected": false,
+            "text": "2 месяца назад",
+            "value": "2 months"
+          },
+          {
+            "selected": false,
+            "text": "3 месяца назад",
+            "value": "3 months"
+          },
+          {
+            "selected": false,
+            "text": "6 месяцев назад",
+            "value": "6 months"
+          },
+          {
+            "selected": false,
+            "text": "1 год назад",
+            "value": "1 year"
+          },
+          {
+            "selected": false,
+            "text": "2 года назад",
+            "value": "2 years"
+          },
+          {
+            "selected": false,
+            "text": "3 года назад",
+            "value": "3 years"
+          }
+        ],
+        "query": "7 дней назад : 7 days, 14 дней назад : 14 days, 1 месяц назад : 1 month, 2 месяца назад : 2 months, 3 месяца назад : 3 months, 6 месяцев назад : 6 months, 1 год назад : 1 year, 2 года назад : 2 years, 3 года назад : 3 years",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "по выручке",
+          "value": "SUM(revenue)"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Сравнить",
+        "multi": false,
+        "name": "compare_calc_var",
+        "options": [
+          {
+            "selected": true,
+            "text": "по выручке",
+            "value": "SUM(revenue)"
+          },
+          {
+            "selected": false,
+            "text": "по количеству",
+            "value": "SUM(quantity)"
+          },
+          {
+            "selected": false,
+            "text": "по среднему чеку",
+            "value": "SUM(revenue)/SUM(quantity)"
+          }
+        ],
+        "query": "по выручке : SUM(revenue), по количеству : SUM(quantity), по среднему чеку : SUM(revenue)/SUM(quantity)",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "2021-06-19T21:00:00.000Z",
+    "to": "2021-06-25T20:59:59.000Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Сравнительный анализ по периодам",
+  "uid": "ccdb4559-a385-4c9c-9a70-91397bdfff22",
+  "version": 3,
+  "weekStart": ""
+}
