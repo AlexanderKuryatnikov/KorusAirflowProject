@@ -57,6 +57,6 @@
     - name: product_var
     - variable type: query
     - label: Товар
-    - query: SELECT DISTINCT name_short FROM datamarts.purchase_forecast
+    - query: SELECT DISTINCT name_short FROM datamarts.purchase_forecast WHERE pos_name IN (@pos_name_var)
     - sort: Alphabetical (case-insensitive, asc)
     - selection options: multi-value, include all options
