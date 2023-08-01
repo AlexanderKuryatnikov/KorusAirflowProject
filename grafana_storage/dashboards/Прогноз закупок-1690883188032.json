@@ -134,7 +134,7 @@
         ]
       },
       "gridPos": {
-        "h": 14,
+        "h": 15,
         "w": 24,
         "x": 0,
         "y": 0
@@ -220,7 +220,7 @@
           "type": "postgres",
           "uid": "${DS_INTERNSHIP_DB}"
         },
-        "definition": "SELECT DISTINCT name_short FROM datamarts.purchase_forecast",
+        "definition": "SELECT name_short FROM datamarts.purchase_forecast WHERE pos_name IN ($pos_name_var)",
         "description": "",
         "hide": 0,
         "includeAll": true,
@@ -228,7 +228,7 @@
         "multi": true,
         "name": "product_var",
         "options": [],
-        "query": "SELECT DISTINCT name_short FROM datamarts.purchase_forecast",
+        "query": "SELECT name_short FROM datamarts.purchase_forecast WHERE pos_name IN ($pos_name_var)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -245,6 +245,6 @@
   "timezone": "",
   "title": "Прогноз закупок",
   "uid": "abf15ad3-0be7-4378-9166-2cbdf6b0d0bc",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }

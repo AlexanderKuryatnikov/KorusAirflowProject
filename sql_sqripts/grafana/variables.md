@@ -23,7 +23,7 @@
 Выбор параметра расчёта топ 5
     - name: top_calc_var
     - variable type: custom
-    - label: Расчитать топ
+    - label: Рассчитать топ
     - custom options: по выручке : revenue, по количеству : quantity
 
 ### Переменные для сравнительного анализа по периодам
@@ -31,7 +31,7 @@
     - name: product_var
     - variable type: query
     - label: Товар
-    - query: SELECT DISTINCT name_short FROM datamarts.sales_report
+    - query: SELECT DISTINCT name_short FROM datamarts.sales_report WHERE category_name IN ($category_var)
     - sort: Alphabetical (case-insensitive, asc)
     - selection options: multi-value, include all options
 Выбор разницы между периодами
